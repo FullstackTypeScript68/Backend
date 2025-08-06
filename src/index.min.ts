@@ -16,7 +16,7 @@ app.get("/todo", async (req, res, next) => {
 });
 
 // Running app
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3769;
 app.listen(PORT, async () => {
   console.log(`Listening on port ${PORT}`);
 });

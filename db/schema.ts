@@ -15,3 +15,19 @@ export const todoTable = pgTable("todo", {
     () => new Date()
   ),
 });
+
+export const ownerTable = pgTable("owner", {
+  id: varchar("id", { length: 20 }).primaryKey(), // ใช้ varchar แทน uuid
+  name: varchar("name", { length: 255 }).notNull(),
+  courseId: varchar("course_id", { length: 20 }).notNull(),
+  section: varchar("section", { length: 10 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export default {
+  todoTable,
+  ownerTable,
+};
