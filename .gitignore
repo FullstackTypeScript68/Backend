@@ -1,6 +1,6 @@
-.env
-.env.test
+# .env
+# .env.test
 node_modules
 dist
 logs
-.npmrc
+# .npmrc
