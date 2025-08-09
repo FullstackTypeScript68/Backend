@@ -19,3 +19,10 @@
 
 - `docker tag preflight-backend [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
 - `docker push [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
+
+# package supplement for upload image
+- `pnpm add multer` --> `pnpm add -D @types/multer`
+- `mkdir uploads`
+
+- Make routes/uploadRoute.ts
+- Make types/express/index.d.ts

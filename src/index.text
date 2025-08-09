@@ -9,46 +9,14 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { ownerTable } from "@db/schema.js"; //เพิ่มขึ้นมาใหม่
-import multer from "multer";
-import path from "path";
-
 const debug = Debug("pf-backend");
 
 //Intializing the express app
 const app = express();
 
-// กำหนด path เก็บรูป
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // สร้างโฟลเดอร์นี้ไว้
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
-
 //Middleware
 app.use(morgan("dev", { immediate: false }));
-
 app.use(helmet());
-// 👇 แทนที่ app.use(helmet());
-// app.use(
-//   helmet({
-//     crossOriginResourcePolicy: { policy: "cross-origin" }, // ✅ เปลี่ยน
-//   })
-// );
-
-app.use(
-  "/uploads",
-  express.static("uploads", {
-    setHeaders(res) {
-      // อนุญาต cross-origin เฉพาะไฟล์รูป
-      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    },
-  })
-);
-
 app.use(
   cors({
     origin: false, // Disable CORS
@@ -57,57 +25,6 @@ app.use(
 );
 // Extracts the entire body portion of an incoming request stream and exposes it on req.body.
 app.use(express.json());
-
-// app.post("/todo/upload", upload.single("image"), async (req, res) => {
-//   const { todoText } = req.body;
-//   const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
-//   // ✅ เพิ่ม isDone: false ไปด้วย
-//   const newTodo = await dbClient
-//     .insert(todoTable)
-//     .values({
-//       todoText,
-//       imageUrl,
-//       isDone: false, // 👈 สำคัญ!
-//     })
-//     .returning();
-
-//   res.status(201).json(newTodo);
-// });
-
-// หลัง (เก็บ URL เต็ม)
-// app.post("/todo/upload", upload.single("image"), async (req, res) => {
-//   const { todoText } = req.body;
-
-//   // ① กำหนด base URL (อ่านจาก env ถ้ามี, ไม่งั้นใช้ host ที่ request เข้ามา)
-//   const base =
-//     process.env.APP_BASE_URL ||
-//     `http://${req.headers.host ?? "localhost:3769"}`;
-
-//   // ② สร้าง imageUrl เต็ม
-//   const imageUrl = req.file ? `${base}/uploads/${req.file.filename}` : null;
-
-//   await dbClient
-//     .insert(todoTable)
-//     .values({ todoText, imageUrl })
-//     .returning({ id: todoTable.id }); // ตามที่คุณใช้งาน
-
-//   res.status(201).json({ ok: true });
-// });
-
-app.post("/todo/upload", upload.single("image"), async (req, res) => {
-  const { todoText } = req.body;
-  const base =
-    process.env.APP_BASE_URL ||
-    `http://${req.headers.host ?? "localhost:3769"}`;
-  const imageUrl = req.file
-    ? `${base}/uploads/${req.file.filename}` // ✅ URL เต็ม
-    : null;
-
-  await dbClient.insert(todoTable).values({ todoText, imageUrl }).returning();
-
-  res.status(201).json({ ok: true });
-});
 
 app.get("/ping", (req, res) => {
   res.send("pong");
