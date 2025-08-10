@@ -26,3 +26,6 @@
 
 - Make routes/uploadRoute.ts
 - Make types/express/index.d.ts
+
+# login packege
+- pnpm add bcryptjs jsonwebtoken@^9

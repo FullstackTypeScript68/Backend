@@ -11,11 +11,18 @@ import morgan from "morgan";
 import { ownerTable } from "@db/schema.js"; //เพิ่มขึ้นมาใหม่
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 
 const debug = Debug("pf-backend");
 
 //Intializing the express app
 const app = express();
+
+// 1) สร้างโฟลเดอร์อัปโหลดทุกครั้งตอนสตาร์ต (กันพลาด)
+fs.mkdirSync("uploads", { recursive: true });
+
+// 2) เสิร์ฟไฟล์แบบ static
+app.use("/uploads", express.static("uploads"));
 
 // กำหนด path เก็บรูป
 const storage = multer.diskStorage({
@@ -32,10 +39,19 @@ const upload = multer({ storage });
 app.use(morgan("dev", { immediate: false }));
 
 app.use(helmet());
+
 // 👇 แทนที่ app.use(helmet());
 // app.use(
 //   helmet({
 //     crossOriginResourcePolicy: { policy: "cross-origin" }, // ✅ เปลี่ยน
+//   })
+// );
+
+// app.use(
+//   helmet({
+//     crossOriginResourcePolicy: { policy: "cross-origin" }, // สำคัญ!
+//     crossOriginEmbedderPolicy: false,
+//     contentSecurityPolicy: false,
 //   })
 // );
 
@@ -48,6 +64,16 @@ app.use(
     },
   })
 );
+
+// app.use(
+//   "/uploads",
+//   express.static(path.join(process.cwd(), "uploads"), {
+//     setHeaders: (res) => {
+//       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+//       res.setHeader("Access-Control-Allow-Origin", "*"); // เสริมได้
+//     },
+//   })
+// );
 
 app.use(
   cors({

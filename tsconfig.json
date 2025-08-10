@@ -8,9 +8,7 @@
     "baseUrl": "./",
     "paths": {
       "@db/*": ["./db/*"]
-    },
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "esModuleInterop": true
+    }
   },
-  "include": ["./*", "./src", "./src/**/*", "./db/**/*", "types/**/*"]
+  "include": ["./*", "./src/**/*", "./db/**/*"]
 }

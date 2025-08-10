@@ -33,12 +33,14 @@
     "db:prototype": "tsx ./db/prototype.ts"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "debug": "^4.4.1",
     "dotenv": "^17.0.0",
     "drizzle-orm": "^0.44.2",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^2.0.2",
     "postgres": "^3.4.7"

@@ -28,6 +28,14 @@ export const ownerTable = pgTable("owner", {
   ),
 });
 
+export const userTable = pgTable("user", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  username: varchar("username", { length: 50 }).notNull().unique(),
+  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  profileUrl: varchar("profile_url", { length: 255 }), // เก็บ URL รูป
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export default {
   todoTable,
   ownerTable,
